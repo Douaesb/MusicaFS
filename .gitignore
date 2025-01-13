@@ -1,0 +1,62 @@
+# Frontend (Angular) specific ignores
+/MusicaFrontend/dist
+/MusicaFrontend/tmp
+/MusicaFrontend/out-tsc
+/MusicaFrontend/.angular/cache
+/MusicaFrontend/node_modules
+/MusicaFrontend/npm-debug.log
+/MusicaFrontend/yarn-error.log
+
+# Backend (Spring) specific ignores
+/MusicaBackend/target
+/MusicaBackend/build
+/MusicaBackend/.mvn/
+!MusicaBackend/.mvn/wrapper/maven-wrapper.jar
+/MusicaBackend/nbproject/private/
+/MusicaBackend/nbbuild/
+/MusicaBackend/dist/
+/MusicaBackend/nbdist/
+/MusicaBackend/.nb-gradle/
+
+# IDEs and editors
+/MusicaFrontend/.idea/
+/MusicaFrontend/.project
+/MusicaFrontend/.classpath
+/MusicaFrontend/.settings/
+.MusicaFrontend/*.launch
+/MusicaFrontend/*.sublime-workspace
+
+/MusicaBackend/.idea/
+/MusicaBackend/.project
+/MusicaBackend/.classpath
+/MusicaBackend/.settings/
+/MusicaBackend/*.launch
+/MusicaBackend/*.sublime-workspace
+
+# Visual Studio Code (for both MusicaFrontend and MusicaBackend)
+**/.vscode/
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/MusicaFrontend/connect.lock
+/MusicaFrontend/coverage
+/MusicaFrontend/libpeerconnection.log
+/MusicaFrontend/testem.log
+/MusicaFrontend/typings
+
+# System files (applies to both)
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.lock
+*.pid
+

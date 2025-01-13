@@ -1,0 +1,27 @@
+<div
+  class="min-h-screen bg-gradient-to-b from-teal-900 to-teal-800 relative overflow-hidden "
+>
+  <!-- Logo -->
+  <img src="../../../assets/bg3.png" alt="image" class="w-full" />
+  <div class="absolute top-4 left-4">
+    
+  </div>
+
+  <!-- Decorative Wave -->
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI1MDAiIHZpZXdCb3g9IjAgMCAxNDQwIDUwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCw0ODBjNDgwLDAsOTYwLTQ4MCwxNDQwLTQ4MHY1MDBIMFY0ODB6IiBmaWxsPSJyZ2JhKDQ1LCAyMTIsIDIxMiwgMC4xKSIvPjwvc3ZnPg==')] bg-cover bg-center opacity-50"
+    ></div>
+  </div>
+  <div *ngIf="selectedTrack$ | async as track;">
+  <app-audio-player [track]="track"></app-audio-player>
+   <!-- Redirect Button -->
+   <div class="absolute top-6 left-4">
+    <button
+      (click)="redirectToTracksPage()"
+      class="px-4 py-2 bg-teal-600 text-white rounded-md shadow-lg hover:bg-teal-500 transition-all"
+    >
+      Go to Tracks
+    </button>
+  </div>
+</div>
