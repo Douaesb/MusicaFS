@@ -1,0 +1,72 @@
+<div class="bg-gradient-to-b from-teal-800 to-teal-700 min-h-screen flex items-center justify-center">
+<div class="bg-teal-900 p-8 rounded-xl shadow-lg max-w-md w-full animate-fadeIn">
+  <div class="flex justify-center mb-8">
+    <img class="w-16 h-16" src="../assets/musium_lg.png" alt="Musium Logo">
+  </div>
+  <h2 class="text-3xl font-bold text-center text-white mb-6">Create an Account</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-4">
+      <label for="username" class="block text-sm font-medium text-teal-300 mb-2">Full Name</label>
+      <input type="text" id="username" name="username" required formControlName="username"
+             [ngClass]="{'border-red-500 focus:ring-red-500': registerForm.get('username')?.invalid && registerForm.get('username')?.touched}"
+             class="w-full px-3 py-2 bg-teal-800 border border-teal-600 rounded-md text-white placeholder-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+             placeholder="Enter your full name">
+      <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+                 class="text-red-500 text-xs animate-fade-in">
+              Username is required
+      </div>
+    </div>
+    <div class="mb-4">
+      <label for="password" class="block text-sm font-medium text-teal-300 mb-2">Password</label>
+      <input type="password" id="password" name="password" required formControlName="password"
+      [ngClass]="{'border-red-500 focus:ring-red-500': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+             class="w-full px-3 py-2 bg-teal-800 border border-teal-600 rounded-md text-white placeholder-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+             placeholder="Create a password">
+      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                 class="text-red-500 text-xs animate-fade-in">
+              Password must be at least 6 characters
+      </div>
+    </div>
+    <div class="space-y-2">
+      <label for="roles" class="text-sm font-medium text-gray-700 block">Roles</label>
+      <div class="relative">
+        <select
+          id="roles"
+          formControlName="roles"
+          multiple
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white"
+          [ngClass]="{'border-red-500 focus:ring-red-500': registerForm.get('roles')?.invalid && registerForm.get('roles')?.touched}"
+        >
+          <option *ngFor="let role of roles" [value]="role">
+            {{ role }}
+          </option>
+        </select>
+        <div *ngIf="registerForm.get('roles')?.invalid && registerForm.get('roles')?.touched"
+             class="absolute -bottom-5 left-0 text-red-500 text-xs animate-fade-in">
+          At least one role selection is required
+        </div>
+      </div>
+    </div>
+    <button type="submit" [disabled]="registerForm.invalid || loading"
+            class="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 transition duration-200">
+      Register
+      <div *ngIf="loading" class="flex items-center space-x-2">
+        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Creating account...</span>
+      </div>
+    </button>
+    <div *ngIf="error"
+             class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm text-center animate-fade-in">
+          {{ error }}
+    </div>
+  </form>
+  <p class="mt-4 text-center text-teal-300">
+    Already have an account?
+    <a routerLink="/auth/login" class="text-teal-400 hover:underline">Login here</a>
+  </p>
+</div>
+</div>
+
