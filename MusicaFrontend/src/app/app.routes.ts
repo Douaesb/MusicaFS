@@ -6,6 +6,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/track-list/track-list.component').then(m => m.TrackListComponent)
     },
     {
+      path: 'albums',
+      loadComponent: () => import('./components/albums/albums.component').then(m => m.AlbumsComponent)
+  },
+    {
         path: 'tracks/:id',
         loadComponent: () => import('./components/track-detail/track-detail.component').then(m => m.TrackDetailComponent)
     },
