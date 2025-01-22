@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -54,14 +55,21 @@ public class ChansonController {
 
     @PostMapping("/admin/chansons")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ChansonDTO> createChanson(@RequestBody ChansonDTO chansonDTO) {
-        return ResponseEntity.ok(chansonService.createChanson(chansonDTO));
+    public ResponseEntity<ChansonDTO> createChanson(
+            @RequestPart("chanson") ChansonDTO chansonDTO,
+            @RequestPart("file") MultipartFile file
+    ) {
+        return ResponseEntity.ok(chansonService.createChanson(chansonDTO, file));
     }
 
     @PutMapping("/admin/chansons/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ChansonDTO> updateChanson(@PathVariable String id, @RequestBody ChansonDTO chansonDTO) {
-        return ResponseEntity.ok(chansonService.updateChanson(id, chansonDTO));
+    public ResponseEntity<ChansonDTO> updateChanson(
+            @PathVariable String id,
+            @RequestPart("chanson") ChansonDTO chansonDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        return ResponseEntity.ok(chansonService.updateChanson(id, chansonDTO, file));
     }
 
     @DeleteMapping("/admin/chansons/{id}")

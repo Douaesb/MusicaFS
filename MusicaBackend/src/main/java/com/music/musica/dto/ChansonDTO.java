@@ -1,10 +1,9 @@
 package com.music.musica.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class ChansonDTO {
@@ -22,6 +21,15 @@ public class ChansonDTO {
     @NotNull(message = "Track number is required")
     @Positive(message = "Track number must be a positive number")
     private Integer trackNumber;
+
+    @Size(max = 200, message = "Description must not exceed 200 characters")
+    private String description;
+
+    private String categorie;
+
+    private Date dateAjout;
+
+    private String audioFileId;
 
     @NotBlank(message = "Album ID is required")
     private String albumId;

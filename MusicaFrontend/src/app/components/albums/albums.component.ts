@@ -12,6 +12,7 @@ import {
   selectAlbumLoading,
   selectAlbumError,
 } from "src/app/state/album/album.selectors";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-albums",
@@ -38,7 +39,7 @@ export class AlbumsComponent {
   private searchArtistSubject = new Subject<string>();
   private filterYearSubject = new Subject<number | null>();
 
-  constructor(private store: Store<{ album: AlbumState }>) {}
+  constructor(private store: Store<{ album: AlbumState }>,  private router: Router) {}
 
   ngOnInit(): void {
     this.loadAlbums();
@@ -170,5 +171,9 @@ export class AlbumsComponent {
 
   deleteAlbum(id: string): void {
     this.store.dispatch(AlbumActions.deleteAlbum({ id }));
+  }
+
+  viewTracks(selectedAlbumId: string): void {
+    this.router.navigate(['/album', selectedAlbumId, 'tracks']);
   }
 }

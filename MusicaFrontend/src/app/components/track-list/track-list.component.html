@@ -1,341 +1,267 @@
-
-<!-- Create Modal -->
+<!-- Modal for Adding/Editing a Track -->
 <div
-id="crud-modal"
-#crudModal
-tabindex="-1"
-aria-hidden="true"
-class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  id="crud-modal"
+  #crudModal
+  tabindex="-1"
+  aria-hidden="true"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden overflow-y-auto"
 >
-<div class="relative p-4 w-full max-w-md max-h-full">
-  <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Create New Track
-      </h3>
-      <button
-        type="button"
-        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-        (click)="closeCreateModal()"
+  <div class="relative p-4 w-full max-w-md max-h-full">
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div
+        class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600"
       >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          {{ modalType === 'add' ? 'Create New Track' : 'Edit Track' }}
+        </h3>
+        <button
+          type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          (click)="closeModal()"
+        >
+          <svg
+            class="w-3 h-3"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <form class="p-4 space-y-4" (ngSubmit)="saveChanson()">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700">
+            Title
+          </label>
+          <input
+            id="title"
+            [(ngModel)]="newChanson.title"
+            name="title"
+            type="text"
+            class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="trackNumber" class="block text-sm font-medium text-gray-700">
+            Track Number
+          </label>
+          <input
+            id="trackNumber"
+            [(ngModel)]="newChanson.trackNumber"
+            name="trackNumber"
+            type="number"
+            class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="duree" class="block text-sm font-medium text-gray-700">
+            Duration (seconds)
+          </label>
+          <input
+            id="duree"
+            [(ngModel)]="newChanson.duree"
+            name="duree"
+            type="number"
+            class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+            required
+          />
+        </div>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:ring focus:ring-gray-300"
+            (click)="closeModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 text-white bg-teal-600 rounded-md hover:bg-teal-700 focus:ring focus:ring-teal-300"
+          >
+            {{ modalType === 'add' ? 'Add Track' : 'Save Changes' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="min-h-screen bg-gradient-to-b from-teal-800 to-teal-700 text-white">
+  <!-- Top Section -->
+  <div class="p-4 space-y-6">
+    <!-- Header -->
+    <div class="flex items-center">
+      <div class="rounded-full">
+        <img class="w-16 h-16" src="../../../assets/musium_lg.png" alt="" />
+      </div>
+      <div class="relative flex-1">
         <svg
-          class="w-3 h-3"
-          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
+          class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
           fill="none"
-          viewBox="0 0 14 14"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
           <path
-            stroke="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-    </div>
-    <form class="p-4 md:p-5" (ngSubmit)="addTrack()">
-      <div class="grid gap-4 mb-4 grid-cols-2">
-        <div class="col-span-2">
-          <label for="image-file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Album Art</label>
-          <input
-            type="file"
-            id="image-file"
-            (change)="onImageFileChange($event)"
-            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            accept="image/*"
-          />
-        </div>
-        
-        <div class="col-span-2">
-          <label
-            for="title"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Track Title</label>
-          <input
-            type="text"
-            id="title"
-            [(ngModel)]="newTrack.title"
-            name="title"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            placeholder="Enter track title"required
-          />
-        </div>
-        <div class="col-span-2 sm:col-span-1">
-          <label
-            for="artist"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Artist</label>
-          <input
-            type="text"
-            id="artist"
-            [(ngModel)]="newTrack.artist"
-            name="artist"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            placeholder="Enter artist name"
-            required
-          />
-        </div>
-        <div class="col-span-2 sm:col-span-1">
-          <label
-            for="category"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Category</label>
-          <select
-            id="category"
-            [(ngModel)]="newTrack.category"
-            name="category"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            required
-          >
-            <option value="" disabled selected>Select category</option>
-            <option value="Pop">Pop</option>
-            <option value="Rock">Rock</option>
-            <option value="Jazz">Jazz</option>
-            <option value="Classical">Classical</option>
-          </select>
-        </div>
-        <div class="col-span-2">
-          <label
-            for="duration"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Description</label>
-          <input
-            type="text"
-            id="description"
-            [(ngModel)]="newTrack.description"
-            name="description"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            placeholder="Enter description"
-            required
-          />
-        </div>
-        <div class="col-span-2">
-          <label
-            for="audio-file"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Audio File</label>
-          <input
-            type="file"
-            id="audio-file"
-            (change)="onFileChange($event)"
-            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            required
-          />
-        </div>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          placeholder="Search"
+          class="border-2 border-teal-300 w-full bg-teal-900 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        />
       </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
       <button
-        type="submit"
-        class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg transition duration-200"
+        (click)="loadChansons()"
+        class="bg-teal-900 border-2 border-teal-300 rounded-xl p-4 text-center hover:bg-opacity-80 transition-colors cursor-pointer"
       >
-        Add New Track
+        Show All
       </button>
-    </form>
-  </div>
-</div>
-</div>
- <!-- Edit Modal -->
- <div *ngIf="selectedTrack" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-    <h3 class="text-2xl font-semibold mb-6 text-teal-600">Edit Track</h3>
-    <form (ngSubmit)="editTrack(selectedTrack)">
-      <div class="col-span-2">
-        <label for="image-file" class="block mb-2 text-sm font-medium text-teal-600">Album Art</label>
-        <input
-          type="file"
-          id="image-file"
-          (change)="onImageFileChange($event, true)"
-          class="mt-2 block w-full text-sm border border-gray-300 rounded-lg focus:outline-none"
-          accept="image/*"
-        />
-      
-      </div>
-      
-      <div class="mb-5">
-        <label for="edit-title" class="block text-sm font-medium text-teal-600">Title</label>
-        <input
-          id="edit-title"
-          [(ngModel)]="selectedTrack.title"
-          name="title"
-          type="text"
-          class="mt-2 p-3 w-full border border-teal-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          placeholder="Enter track title"
-          required
-        />
-      </div>
-
-      <div class="mb-5">
-        <label for="edit-artist" class="block text-sm font-medium text-teal-600">Artist</label>
-        <input
-          id="edit-artist"
-          [(ngModel)]="selectedTrack.artist"
-          name="artist"
-          type="text"
-          class="mt-2 p-3 w-full border border-teal-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          placeholder="Enter artist name"
-          required
-        />
-      </div>
-
-      <div class="mb-5">
-        <label for="edit-category" class="block text-sm font-medium text-teal-600">Category</label>
-        <select
-          id="edit-category"
-          [(ngModel)]="selectedTrack.category"
-          name="category"
-          class="mt-2 p-3 w-full border border-teal-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          required
-        >
-          <option value="" disabled>Select category</option>
-          <option value="Pop">Pop</option>
-          <option value="Rock">Rock</option>
-          <option value="Jazz">Jazz</option>
-          <option value="Classical">Classical</option>
-        </select>
-      </div>
-
-      <div class="mb-5">
-        <label for="edit-description" class="block text-sm font-medium text-teal-600">Description</label>
-        <input
-          id="edit-description"
-          [(ngModel)]="selectedTrack.description"
-          name="description"
-          type="text"
-          class="mt-2 p-3 w-full border border-teal-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          placeholder="Enter description"
-          required
-        />
-      </div>
-      <div class="col-span-2">
-        <label for="audio-file" class="block text-sm font-medium text-teal-600">Audio File</label>
-        <input
-          type="file"
-          id="audio-file"
-          (change)="onFileChange($event)"
-          class="mt-2 block w-full text-sm border border-gray-300 rounded-lg focus:outline-none"
-        />
-      </div>
-      <div class="flex justify-between items-center mt-6">
-        <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg transition duration-200">
-          Save Changes
-        </button>
-        <button type="button" (click)="closeEditModal()" class="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition duration-200">
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-
-
-<div class="min-h-screen bg-gradient-to-b from-teal-800 to-teal-700 text-white">
-    <!-- Top Section -->
-    <div class="p-4 space-y-6">
-        <!-- Header -->
-        <div class="flex items-center ">
-            <div class=" rounded-full">
-              <img class="w-16 h-16" src="../../../assets/musium_lg.png" alt="">
-            </div>
-            <div class="relative flex-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input 
-                type="text" 
-                placeholder="Search" 
-                [(ngModel)]="searchQuery" 
-                (input)="onSearch()" 
-                class="border-2 border-teal-300 w-full bg-teal-900 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-teal-400"
-              >            </div>
-        </div>
-
-        <!-- Categories -->
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
-  <button 
-  class="bg-teal-900 border-2 border-teal-300 rounded-xl p-4 text-center hover:bg-opacity-80 transition-colors cursor-pointer"
-  (click)="resetFilter()"
->
-  Show All
-</button>
-  <div 
-    *ngFor="let category of categories" 
-    class="bg-teal-900 border-2 border-teal-300 rounded-xl p-4 text-center hover:bg-opacity-80 transition-colors cursor-pointer"
-    (click)="filterByCategory(category)"
-  >
-    {{ category }}
-  </div>
-</div>
-
+      <div
+        class="bg-teal-900 border-2 border-teal-300 rounded-xl p-4 text-center hover:bg-opacity-80 transition-colors cursor-pointer"
+      ></div>
     </div>
+  </div>
 
-    <button
-    (click)="openCreateModal()"
-    class="block text-black  border border-teal-800 ml-24 bg-teal-300  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  <button
+    (click)="openAddModal()"
+    class="block text-black border border-teal-800 ml-24 bg-teal-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
     type="button"
   >
-    add track
+    Add Track
   </button>
-    <!-- Main Content -->
-    <div class="flex">
-        <!-- Sidebar -->
-        <div class="hidden sm:flex flex-col gap-6 bg-teal-900 p-4 rounded-r-xl">
-            <button class="p-2 hover:bg-teal-400 rounded-lg transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-            </button>
-            <button class="p-2 hover:bg-teal-400 rounded-lg transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-            </button>
-            <button class="p-2 hover:bg-teal-400 rounded-lg transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
-                </svg>
-            </button>
-            <button class="p-2 hover:bg-teal-400 rounded-lg transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Playlist -->
-        <div class="flex-1 p-4 space-y-2" *ngIf="(filteredTracks$ | async) as filteredTracks;   ">
-          <div *ngFor="let track of filteredTracks" class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors">
-            <div *ngIf="selectedTrack?.id !== track.id" class="flex items-center gap-3">
-              <div class="w-8 h-8 bg-teal-400/20 rounded-lg">
-                <img *ngIf="imageUrls[track.id!]" [src]="imageUrls[track.id!]" alt="Track Image" />
-              </div>
-              
-              <div>
-                <div class="font-medium">{{ track.title }} | {{ track.category }} |  {{ track.createdAt | formatDate }}</div>
-                <div class="text-sm text-gray-400">{{ track.artist }}</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3">
-              <!-- <span class="text-gray-400">{{ track.duration }} : 00</span> -->
-              <span class="text-teal-400">{{ formatTime(track.duration) }}</span>
-               <button (click)="selectTrack(track)" class="text-white py-1 px-3 rounded-lg transition">
-                 <svg  class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.0748 7.50835C9.74622 6.72395 8.25 7.79065 8.25 9.21316V14.7868C8.25 16.2093 9.74622 17.276 11.0748 16.4916L15.795 13.7048C17.0683 12.953 17.0683 11.047 15.795 10.2952L11.0748 7.50835ZM9.75 9.21316C9.75 9.01468 9.84615 8.87585 9.95947 8.80498C10.0691 8.73641 10.1919 8.72898 10.3122 8.80003L15.0324 11.5869C15.165 11.6652 15.25 11.8148 15.25 12C15.25 12.1852 15.165 12.3348 15.0324 12.4131L10.3122 15.2C10.1919 15.271 10.0691 15.2636 9.95947 15.195C9.84615 15.1242 9.75 14.9853 9.75 14.7868V9.21316Z" fill="#12cbce"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#12cbce"></path> </g></svg>              </button>
-                 
-      <button (click)="openEditModal(track)" class=" text-white py-1 px-3 rounded-lg transition duration-200">
-                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke="#12cbce" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke="#12cbce" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-              </button>
-             
-              <button *ngIf="track.id !== undefined" (click)="deleteTrack(track.id)" class="text-white py-1 px-3 rounded-lg transition">
-                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 7H20" stroke="#12cbce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 10L7.70141 19.3578C7.87432 20.3088 8.70258 21 9.66915 21H14.3308C15.2974 21 16.1257 20.3087 16.2986 19.3578L18 10" stroke="#12cbce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#12cbce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-              </button>
-            </div>
-          </div>        
-        </div>
-
+  <!-- Main Content -->
+  <div class="flex">
+    <!-- Sidebar -->
+    <div class="hidden sm:flex flex-col gap-6 bg-teal-900 p-4 rounded-r-xl">
+      <!-- Sidebar content -->
     </div>
+
+    <!-- Playlist -->
+    <div class="flex-1 p-4 space-y-2">
+      <div
+        *ngFor="let chanson of chansons$ | async"
+        class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-teal-400/20 rounded-lg">
+            <img alt="Track Image" />
+          </div>
+
+          <div>
+            <div class="font-medium">
+              {{ chanson.title }} | {{ chanson.albumId }}
+            </div>
+            <div class="text-sm text-gray-400"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-teal-400">{{ chanson.duree }}</span>
+          <button class="text-white py-1 px-3 rounded-lg transition">
+            <!-- Play button SVG -->
+          </button>
+
+          <button
+            (click)="openEditModal(chanson)"
+            class="text-white py-1 px-3 rounded-lg transition duration-200"
+          >
+            <svg
+              class="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                  stroke="#12cbce"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                  stroke="#12cbce"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+          </button>
+
+          <button
+            (click)="deleteChanson(chanson)"
+            class="text-white py-1 px-3 rounded-lg transition"
+          >
+            <svg
+              class="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M4 7H20"
+                  stroke="#12cbce"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M6 10L7.70141 19.3578C7.87432 20.3088 8.70258 21 9.66915 21H14.3308C15.2974 21 16.1257 20.3087 16.2986 19.3578L18 10"
+                  stroke="#12cbce"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
+                  stroke="#12cbce"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 

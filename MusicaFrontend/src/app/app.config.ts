@@ -10,12 +10,13 @@ import {AuthEffects} from "./state/auth/auth.effects";
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptors';
 import { AlbumEffects } from './state/album/album.effects';
+import { ChansonEffects } from './state/chanson/chanson.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideStore(reducers),
-    provideEffects([TrackEffects, AuthEffects, AlbumEffects]),
+    provideEffects([TrackEffects, AuthEffects, AlbumEffects, ChansonEffects]),
     provideHttpClient(withInterceptors([authInterceptor])),
   ],
 };
