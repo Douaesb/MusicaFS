@@ -39,9 +39,7 @@
       <form class="p-4 md:p-5" #albumForm="ngForm" (ngSubmit)="saveAlbum()">
         <div class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2">
-            <label for="title" class="block mb-2 text-sm font-medium"
-              >Album Title</label
-            >
+            <label for="title" class="block mb-2 text-sm font-medium">Album Title</label>
             <input
               type="text"
               id="title"
@@ -89,8 +87,8 @@
 <div class="min-h-screen bg-gradient-to-b from-teal-800 to-teal-700 text-white p-8">
   <div class="container mx-auto">
     <!-- Header -->
-    <header class="flex items-center justify-between mb-8 w-2/3">
-      <div class="flex items-center">
+    <header class="flex flex-col md:flex-row items-center justify-between w-2/3 mb-8">
+      <div class="flex items-center mb-4 md:mb-0">
         <img
           class="w-16 h-16 mr-4"
           src="../../../assets/musium_logo.png?height=64&width=64"
@@ -98,27 +96,73 @@
         />
         <h1 class="text-3xl font-bold">Album Collection</h1>
       </div>
-      <div class="relative">
-        <input
-          type="text"
-          placeholder="Search albums"
-          class="border-2 border-teal-300 w-96 bg-teal-900 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-teal-400"
-          aria-label="Search albums"
-        />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="searchTitle"
+            (input)="searchByTitle(searchTitle)"
+            placeholder="Search by title"
+            class="border-2 border-teal-300 w-64 sm:w-80 bg-teal-900 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            aria-label="Search albums by title"
           />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+        <!-- <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="searchArtist"
+            (input)="searchByArtist(searchArtist)"
+            placeholder="Search by artist"
+            class="border-2 border-teal-300 w-64 sm:w-80 bg-teal-900 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            aria-label="Search albums by artist"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div> -->
+        <div class="flex items-center space-x-2">
+          <label for="yearFilter" class="text-sm font-medium">Filter by Year:</label>
+          <input
+            type="number"
+            id="yearFilter"
+            [(ngModel)]="filterYear"
+            (input)="filterByYear(filterYear)"
+            class="border-2 border-teal-300 bg-teal-900 rounded-lg py-1 px-2 w-24 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            placeholder="Year"
+          />
+          <!-- <button
+            (click)="loadAlbums()"
+            class="bg-teal-300 text-teal-900 font-bold py-1 px-3 rounded-lg hover:bg-teal-400 transition duration-200 ml-2"
+            aria-label="Reset filters"
+          >
+            Reset
+          </button> -->
+        </div>
       </div>
     </header>
 
@@ -133,13 +177,25 @@
       </button>
     </div>
 
+    <!-- Loading Indicator -->
+    <div *ngIf="loading$ | async" class="text-center py-4">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-300"></div>
+      <p class="mt-2">Loading albums...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error$ | async as error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+
     <!-- Album Grid -->
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
       <div
         *ngFor="let album of albums$ | async"
-        class="bg-teal-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+        class="bg-teal-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
       >
         <img
           src="../../../assets/musium_logo.png?height=300&width=300"
@@ -152,23 +208,28 @@
           <p class="text-sm text-teal-400 mb-4">Release Year: {{ album.year }}</p>
           <div class="flex justify-between">
             <button
-            (click)="openEditModal(album)"
-            class="text-sm bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-lg"
-            [attr.aria-label]="'Edit album ' + album.title"
-          >
-            Edit
-          </button>
-          <button
-            (click)="deleteAlbum(album.id!)"
-            class="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg"
-            [attr.aria-label]="'Delete album ' + album.title"
-          >
-            Delete
-          </button>
-          
+              (click)="openEditModal(album)"
+              class="text-sm bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-lg transition duration-200"
+              [attr.aria-label]="'Edit album ' + album.title"
+            >
+              Edit
+            </button>
+            <button
+              (click)="deleteAlbum(album.id!)"
+              class="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg transition duration-200"
+              [attr.aria-label]="'Delete album ' + album.title"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="(albums$ | async)?.length === 0" class="text-center py-8">
+      <p class="text-xl">No albums found. Try adjusting your search or filter.</p>
+    </div>
   </div>
 </div>
+

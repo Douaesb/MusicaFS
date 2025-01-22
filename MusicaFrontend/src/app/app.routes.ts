@@ -1,17 +1,21 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
         path: 'tracks',
-        loadComponent: () => import('./components/track-list/track-list.component').then(m => m.TrackListComponent)
+        loadComponent: () => import('./components/track-list/track-list.component').then(m => m.TrackListComponent),
+        canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
     },
     {
       path: 'albums',
-      loadComponent: () => import('./components/albums/albums.component').then(m => m.AlbumsComponent)
+      loadComponent: () => import('./components/albums/albums.component').then(m => m.AlbumsComponent),
+      canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
   },
     {
         path: 'tracks/:id',
-        loadComponent: () => import('./components/track-detail/track-detail.component').then(m => m.TrackDetailComponent)
+        loadComponent: () => import('./components/track-detail/track-detail.component').then(m => m.TrackDetailComponent),
+        canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
     },
     {
         path: '',

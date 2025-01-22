@@ -24,10 +24,8 @@ export const AuthGuard = (requiredRoles: string[] = []) => {
         const token = authState.token;
         const decodedToken: any = jwtDecode(token);
 
-        // Debug the full token content
         console.log('Decoded Token:', decodedToken);
 
-        // Check different possible role claim names
         const userRoles: string[] =
           decodedToken.roles ||
           decodedToken.authorities ||

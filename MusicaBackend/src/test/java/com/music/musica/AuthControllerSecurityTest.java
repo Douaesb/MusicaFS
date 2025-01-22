@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +43,7 @@ class AuthControllerSecurityTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        authController = new AuthController(authenticationManager, jwtTokenProvider, userService);
+        authController = new AuthController(authenticationManager, jwtTokenProvider, userService, null);
     }
 
     @Test
@@ -57,7 +58,7 @@ class AuthControllerSecurityTest {
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(jwtTokenProvider.generateToken("user1")).thenReturn("mocked-token");
+        when(jwtTokenProvider.generateToken("user1", List.of("ROLE_USER", "ROLE_ADMIN"))).thenReturn("mocked-token");
 
         // Act
         ResponseEntity<AuthResponse> response = authController.login(request);
@@ -102,7 +103,7 @@ class AuthControllerSecurityTest {
         registeredUser.setRoles(Collections.singletonList("ROLE_USER"));
 
         when(userService.register(userDTO)).thenReturn(registeredUser);
-        when(jwtTokenProvider.generateToken("newuser")).thenReturn("mocked-token");
+        when(jwtTokenProvider.generateToken("newuser", List.of("ROLE_USER"))).thenReturn("mocked-token");
 
         // Act
         ResponseEntity<AuthResponse> response = authController.register(userDTO);
