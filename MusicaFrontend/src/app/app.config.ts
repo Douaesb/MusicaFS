@@ -9,12 +9,13 @@ import { provideEffects } from '@ngrx/effects';
 import {AuthEffects} from "./state/auth/auth.effects";
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptors';
+import { AlbumEffects } from './state/album/album.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideStore(reducers),
-    provideEffects([TrackEffects, AuthEffects]),
+    provideEffects([TrackEffects, AuthEffects, AlbumEffects]),
     provideHttpClient(withInterceptors([authInterceptor])),
   ],
 };
