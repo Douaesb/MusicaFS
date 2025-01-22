@@ -4,7 +4,7 @@ import { AuthGuard } from './guards/auth.guard';
 export const routes: Routes = [
     {
         path: 'album/:albumId/tracks',
-        loadComponent: () => import('./components/track-list/track-list.component').then(m => m.TracklistComponent),
+        loadComponent: () => import('./components/track-list/track-list.component').then(m => m.TrackListComponent),
         canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
     },
     {

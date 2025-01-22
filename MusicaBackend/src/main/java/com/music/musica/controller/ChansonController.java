@@ -1,7 +1,9 @@
 package com.music.musica.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.music.musica.dto.ChansonDTO;
 import com.music.musica.service.ChansonService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
+@Slf4j
 @RequestMapping("/api")
 public class ChansonController {
 
@@ -56,9 +61,17 @@ public class ChansonController {
     @PostMapping("/admin/chansons")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ChansonDTO> createChanson(
-            @RequestPart("chanson") ChansonDTO chansonDTO,
-            @RequestPart("file") MultipartFile file
-    ) {
+            @RequestParam("chanson") String chansonJson,
+            @RequestParam("audioFile") MultipartFile file) throws IOException {
+
+        // Convert the chansonJson string to a ChansonDTO object
+        ChansonDTO chansonDTO = new ObjectMapper().readValue(chansonJson, ChansonDTO.class);
+
+        // Log the chansonDTO to check for null values
+        log.debug("ChansonDTO received: {}", chansonDTO);
+        log.debug("ChansonDTO id: {}", chansonDTO.getId());
+
+        // Continue with processing
         return ResponseEntity.ok(chansonService.createChanson(chansonDTO, file));
     }
 
