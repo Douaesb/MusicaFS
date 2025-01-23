@@ -83,7 +83,7 @@ export class TrackListComponent implements OnInit {
 
  editChanson(chanson: Chanson): void {
     this.selectedChanson = { ...chanson }; 
-    // this.audioFile = null; 
+    this.audioFile = null; 
     this.showModal = true;
   }
 

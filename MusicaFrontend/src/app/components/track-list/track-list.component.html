@@ -216,7 +216,7 @@
       *ngIf="chansons$ | async as chansons; else loading"
       class="flex-1 p-4 space-y-2"
     >
-      <div *ngIf="chansons!.length > 0; else noData">
+      <div *ngIf="chansons!.length > 0; else noData" class="flex gap-4 flex-col">
         <div
           *ngFor="let chanson of chansons"
           class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors"

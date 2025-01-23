@@ -7,6 +7,8 @@ import { Store } from "@ngrx/store";
 import { Album } from "src/app/state/album/album.models";
 import { AlbumState } from "src/app/state/album/album.reducer";
 import * as AlbumActions from "src/app/state/album/album.action";
+import * as AuthActions from "src/app/state/auth/auth.action";
+
 import {
   selectAllAlbums,
   selectAlbumLoading,
@@ -175,5 +177,9 @@ export class AlbumsComponent {
 
   viewTracks(selectedAlbumId: string): void {
     this.router.navigate(['/album', selectedAlbumId, 'tracks']);
+  }
+
+  logout() {
+    this.store.dispatch(AuthActions.logout())
   }
 }
