@@ -55,7 +55,7 @@ export class TrackListComponent implements OnInit {
   onPageChange(page: number): void {
     this.loadPage(page);
   }
-  
+
   openAddModal(): void {
     this.showModal = true;
     this.selectedChanson = {
@@ -81,8 +81,9 @@ export class TrackListComponent implements OnInit {
     this.router.navigate(['/album', albumId, 'tracks']);
   }
 
-  editChanson(chanson: Chanson): void {
+ editChanson(chanson: Chanson): void {
     this.selectedChanson = { ...chanson }; 
+    // this.audioFile = null; 
     this.showModal = true;
   }
 
@@ -106,7 +107,10 @@ export class TrackListComponent implements OnInit {
     }
   
     if (this.selectedChanson.id) {
-      this.store.dispatch(updateChanson({ chanson: this.selectedChanson }));
+      this.store.dispatch(updateChanson({ 
+        chanson: this.selectedChanson,
+        audioFile: this.audioFile || undefined
+      }));
     } else {
       if (this.audioFile) {
         this.store.dispatch(createChanson({
@@ -114,7 +118,7 @@ export class TrackListComponent implements OnInit {
           audioFile: this.audioFile
         }));
       } else {
-        console.error('Audio file is required');
+        console.error('Audio file is required for new tracks');
       }
     }
   

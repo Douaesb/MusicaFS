@@ -46,9 +46,14 @@ export class ChansonService {
     return this.http.post<Chanson>(this.apiUrl, formData);
 }
 
-  updateChanson(id: string, chanson: Chanson): Observable<Chanson> {
-    return this.http.put<Chanson>(`${this.apiUrl}/${id}`, chanson);
+updateChanson(id: string, chanson: Chanson, audioFile?: File): Observable<Chanson> {
+  const formData = new FormData();
+  formData.append('chanson', JSON.stringify(chanson));
+  if (audioFile) {
+    formData.append('audioFile', audioFile, audioFile.name);
   }
+  return this.http.put<Chanson>(`${this.apiUrl}/${id}`, formData);
+}
 
   deleteChanson(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

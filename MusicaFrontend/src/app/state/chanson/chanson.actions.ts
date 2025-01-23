@@ -13,8 +13,10 @@ export const createChansonSuccess = createAction('[Chanson] Create Chanson Succe
 
 export const createChansonFailure = createAction('[Chanson] Create Chanson Failure', props<{ error: any }>());
 
-export const updateChanson = createAction('[Chanson] Update Chanson', props<{ chanson: Chanson }>());
-
+export const updateChanson = createAction(
+  '[Chanson] Update Chanson', 
+  props<{ chanson: Chanson, audioFile?: File }>()
+);
 export const updateChansonSuccess = createAction('[Chanson] Update Chanson Success', props<{ chanson: Chanson }>());
 
 export const updateChansonFailure = createAction('[Chanson] Update Chanson Failure', props<{ error: any }>());

@@ -62,7 +62,11 @@ export class ChansonEffects {
     this.actions$.pipe(
       ofType(ChansonActions.updateChanson),
       mergeMap(action =>
-        this.chansonService.updateChanson(action.chanson.id!, action.chanson).pipe(
+        this.chansonService.updateChanson(
+          action.chanson.id!, 
+          action.chanson, 
+          action.audioFile
+        ).pipe(
           map(chanson => ChansonActions.updateChansonSuccess({ chanson })),
           catchError(error => of(ChansonActions.updateChansonFailure({ error })))
         )

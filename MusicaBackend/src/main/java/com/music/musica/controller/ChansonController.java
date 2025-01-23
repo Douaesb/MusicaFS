@@ -63,15 +63,9 @@ public class ChansonController {
     public ResponseEntity<ChansonDTO> createChanson(
             @RequestParam("chanson") String chansonJson,
             @RequestParam("audioFile") MultipartFile file) throws IOException {
-
-        // Convert the chansonJson string to a ChansonDTO object
         ChansonDTO chansonDTO = new ObjectMapper().readValue(chansonJson, ChansonDTO.class);
-
-        // Log the chansonDTO to check for null values
         log.debug("ChansonDTO received: {}", chansonDTO);
         log.debug("ChansonDTO id: {}", chansonDTO.getId());
-
-        // Continue with processing
         return ResponseEntity.ok(chansonService.createChanson(chansonDTO, file));
     }
 
@@ -79,9 +73,9 @@ public class ChansonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ChansonDTO> updateChanson(
             @PathVariable String id,
-            @RequestPart("chanson") ChansonDTO chansonDTO,
-            @RequestPart(value = "file", required = false) MultipartFile file
-    ) {
+            @RequestParam("chanson") String chansonJson,
+            @RequestParam("audioFile") MultipartFile file) throws IOException {
+        ChansonDTO chansonDTO = new ObjectMapper().readValue(chansonJson, ChansonDTO.class);
         return ResponseEntity.ok(chansonService.updateChanson(id, chansonDTO, file));
     }
 
