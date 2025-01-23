@@ -26,6 +26,24 @@ export class ChansonEffects {
     )
   );
 
+  loadChansonsByAlbumId$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ChansonActions.loadChansonsByAlbumId),
+      mergeMap(action =>
+        this.chansonService.getChansonsByAlbumId(action.albumId, action.page, action.size, action.sortBy).pipe(
+          map(response => ChansonActions.loadChansonsByAlbumIdSuccess({ 
+            content: response.content,
+            totalPages: response.totalPages,
+            totalElements: response.totalElements,
+            pageSize: response.pageable.pageSize,
+            pageNumber: response.pageable.pageNumber
+          })),
+          catchError(error => of(ChansonActions.loadChansonsByAlbumIdFailure({ error })))
+        )
+      )
+    )
+  );
+
   // Create chanson
   createChanson$ = createEffect(() =>
     this.actions$.pipe(

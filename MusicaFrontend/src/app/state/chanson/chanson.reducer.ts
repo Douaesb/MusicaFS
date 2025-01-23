@@ -6,12 +6,24 @@ export interface ChansonState {
   chansons: Chanson[];
   loading: boolean;
   error: any;
+  pagination: {
+    totalPages: number;
+    totalElements: number;
+    pageSize: number;
+    pageNumber: number;
+  };
 }
 
 export const initialState: ChansonState = {
   chansons: [],
   loading: false,
-  error: null
+  error: null,
+  pagination: {
+    totalPages: 0,
+    totalElements: 0,
+    pageSize: 10,
+    pageNumber: 0
+  }
 };
 
 export const chansonReducer = createReducer(
@@ -44,5 +56,25 @@ export const chansonReducer = createReducer(
   on(ChansonActions.deleteChansonSuccess, (state, { id }) => ({
     ...state,
     chansons: state.chansons.filter(c => c.id !== id),
+  })),
+  on(ChansonActions.loadChansonsByAlbumId, (state) => ({
+    ...state,
+    loading: true,
+  })),
+  on(ChansonActions.loadChansonsByAlbumIdSuccess, (state, { content, totalPages, totalElements, pageSize, pageNumber }) => ({
+    ...state,
+    loading: false,
+    chansons: content,
+    pagination: {
+      totalPages,
+      totalElements,
+      pageSize,
+      pageNumber
+    }
+  })),
+  on(ChansonActions.loadChansonsByAlbumIdFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error,
   }))
 );

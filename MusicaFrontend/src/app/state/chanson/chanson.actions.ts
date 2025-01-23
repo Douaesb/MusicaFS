@@ -24,3 +24,23 @@ export const deleteChanson = createAction('[Chanson] Delete Chanson', props<{ id
 export const deleteChansonSuccess = createAction('[Chanson] Delete Chanson Success', props<{ id: string }>());
 
 export const deleteChansonFailure = createAction('[Chanson] Delete Chanson Failure', props<{ error: any }>());
+
+export const loadChansonsByAlbumId = createAction(
+  '[Chanson] Load Chansons By Album ID',
+  props<{ albumId: string; page: number; size: number; sortBy: string }>()
+);
+
+export const loadChansonsByAlbumIdSuccess = createAction(
+  '[Chanson] Load Chansons By Album ID Success',
+  props<{ 
+    content: Chanson[],
+    totalPages: number,
+    totalElements: number,
+    pageSize: number,
+    pageNumber: number
+  }>()
+);
+export const loadChansonsByAlbumIdFailure = createAction(
+  '[Chanson] Load Chansons By Album ID Failure',
+  props<{ error: any }>()
+);
