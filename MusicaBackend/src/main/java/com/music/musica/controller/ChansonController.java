@@ -74,7 +74,7 @@ public class ChansonController {
     public ResponseEntity<ChansonDTO> updateChanson(
             @PathVariable String id,
             @RequestParam("chanson") String chansonJson,
-            @RequestParam("audioFile") MultipartFile file) throws IOException {
+            @RequestParam(value = "audioFile", required = false) MultipartFile file) throws IOException {
         ChansonDTO chansonDTO = new ObjectMapper().readValue(chansonJson, ChansonDTO.class);
         return ResponseEntity.ok(chansonService.updateChanson(id, chansonDTO, file));
     }

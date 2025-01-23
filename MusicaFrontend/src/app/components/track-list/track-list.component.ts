@@ -109,7 +109,7 @@ export class TrackListComponent implements OnInit {
     if (this.selectedChanson.id) {
       this.store.dispatch(updateChanson({ 
         chanson: this.selectedChanson,
-        audioFile: this.audioFile || undefined
+        audioFile: this.audioFile || undefined 
       }));
     } else {
       if (this.audioFile) {

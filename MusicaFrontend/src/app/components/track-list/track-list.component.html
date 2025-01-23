@@ -4,14 +4,16 @@
   #crudModal
   tabindex="-1"
   aria-hidden="true"
-  [ngClass]="{ 'hidden': !showModal }"
+  [ngClass]="{ hidden: !showModal }"
   class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden overflow-y-auto"
 >
   <div class="relative p-4 w-full max-w-md max-h-full">
     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-      <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+      <div
+        class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600"
+      >
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-          {{ selectedChanson.id ? 'Edit Track' : 'Create New Track' }}
+          {{ selectedChanson.id ? "Edit Track" : "Create New Track" }}
         </h3>
         <button
           type="button"
@@ -51,7 +53,10 @@
         </div>
 
         <div>
-          <label for="trackNumber" class="block text-sm font-medium text-gray-700">
+          <label
+            for="trackNumber"
+            class="block text-sm font-medium text-gray-700"
+          >
             Track Number
           </label>
           <input
@@ -80,7 +85,10 @@
 
         <!-- New Fields -->
         <div>
-          <label for="description" class="block text-sm font-medium text-gray-700">
+          <label
+            for="description"
+            class="block text-sm font-medium text-gray-700"
+          >
             Description
           </label>
           <textarea
@@ -92,7 +100,10 @@
         </div>
 
         <div>
-          <label for="categorie" class="block text-sm font-medium text-gray-700">
+          <label
+            for="categorie"
+            class="block text-sm font-medium text-gray-700"
+          >
             Category
           </label>
           <input
@@ -106,7 +117,10 @@
 
         <!-- File Upload Section -->
         <div>
-          <label for="audioFile" class="block text-sm font-medium text-gray-700">
+          <label
+            for="audioFile"
+            class="block text-sm font-medium text-gray-700"
+          >
             Audio File
           </label>
           <input
@@ -147,14 +161,13 @@
             type="submit"
             class="px-4 py-2 text-white bg-teal-600 rounded-md hover:bg-teal-700 focus:ring focus:ring-teal-300"
           >
-            {{ selectedChanson.id ? 'Save Changes' : 'Add Track' }}
+            {{ selectedChanson.id ? "Save Changes" : "Add Track" }}
           </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-
 
 <!-- Main Content for Track List -->
 <div class="min-h-screen bg-gradient-to-b from-teal-800 to-teal-700 text-white">
@@ -199,68 +212,73 @@
     </button>
 
     <!-- Track List -->
-    <div *ngIf="chansons$ | async as chansons; else loading" class="flex-1 p-4 space-y-2">
+    <div
+      *ngIf="chansons$ | async as chansons; else loading"
+      class="flex-1 p-4 space-y-2"
+    >
       <div *ngIf="chansons!.length > 0; else noData">
-      <div
-        *ngFor="let chanson of chansons"
-        class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors"
-      >
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-teal-400/20 rounded-lg">
-            <img alt="Track Image" />
-          </div>
+        <div
+          *ngFor="let chanson of chansons"
+          class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-teal-400/20 rounded-lg">
+              <img alt="Track Image" />
+            </div>
 
-          <div>
-            <div class="font-medium">
-              {{ chanson.title }} | {{ chanson.albumId }}
+            <div>
+              <div class="font-medium">
+                {{ chanson.title }} | {{ chanson.albumId }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="text-teal-400">{{ chanson.duree }}</span>
-          <button class="text-white py-1 px-3 rounded-lg transition">
-            <!-- Play button SVG -->
-          </button>
+          <div class="flex items-center gap-3">
+            <span class="text-teal-400">{{ chanson.duree }}</span>
+            <button class="text-white py-1 px-3 rounded-lg transition">
+              <!-- Play button SVG -->
+            </button>
 
-          <button
-            (click)="editChanson(chanson)"
-            class="text-white py-1 px-3 rounded-lg transition duration-200"
-          >
-            Edit
-          </button>
+            <button
+              (click)="editChanson(chanson)"
+              class="text-white py-1 px-3 rounded-lg transition duration-200"
+            >
+              Edit
+            </button>
 
-          <button
-            (click)="deleteChanson(chanson.id!)"
-            class="text-white py-1 px-3 rounded-lg transition"
-          >
-            Delete
-          </button>
+            <button
+              (click)="deleteChanson(chanson.id!)"
+              class="text-white py-1 px-3 rounded-lg transition"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Add pagination controls -->
-    <div *ngIf="pagination$ | async as pagination" class="flex justify-center mt-4 gap-2">
-      <button 
-        [disabled]="currentPage === 0"
-        (click)="onPageChange(currentPage - 1)"
-        class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md disabled:opacity-50"
+      <!-- Add pagination controls -->
+      <div
+        *ngIf="pagination$ | async as pagination"
+        class="flex justify-center mt-4 gap-2"
       >
-        Previous
-      </button>
-      <span class="px-4 py-2 text-sm">
-        Page {{ currentPage + 1 }} of {{ pagination.totalPages }}
-      </span>
-      <button 
-        [disabled]="currentPage >= pagination.totalPages - 1"
-        (click)="onPageChange(currentPage + 1)"
-        class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md disabled:opacity-50"
-      >
-        Next
-      </button>
-    </div>
+        <button
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage - 1)"
+          class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span class="px-4 py-2 text-sm">
+          Page {{ currentPage + 1 }} of {{ pagination.totalPages }}
+        </span>
+        <button
+          [disabled]="currentPage >= pagination.totalPages - 1"
+          (click)="onPageChange(currentPage + 1)"
+          class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
       <ng-template #noData>No tracks available.</ng-template>
     </div>
     <ng-template #loading>Loading...</ng-template>
-
   </div>
 </div>

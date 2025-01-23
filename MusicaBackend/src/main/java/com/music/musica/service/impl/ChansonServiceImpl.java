@@ -78,6 +78,12 @@ public class ChansonServiceImpl implements ChansonService {
         chanson.setDescription(chansonDTO.getDescription());
         chanson.setCategorie(chansonDTO.getCategorie());
         chanson.setAlbum(album);
+        chanson.setDateAjout(LocalDateTime.now());
+        if (file != null && !file.isEmpty()) {
+            validateAudioFile(file);
+            String audioFileId = gridFsService.saveFile(file);
+            chanson.setAudioFileId(audioFileId);
+        }
 
         return chansonMapper.toDTO(chansonRepository.save(chanson));
     }
