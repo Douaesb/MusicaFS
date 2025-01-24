@@ -43,6 +43,7 @@ export class ChansonService {
     const formData = new FormData();
     formData.append('chanson', JSON.stringify(chanson)); 
     formData.append('audioFile', audioFile, audioFile.name);
+    // formData.forEach((value, key) => {console.log(key + ' ' + value)}); 
     return this.http.post<Chanson>(this.apiUrl, formData);
 }
 
