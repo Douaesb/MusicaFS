@@ -2,11 +2,11 @@ import { CommonModule } from "@angular/common"
 import { Component, OnInit } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import  { ActivatedRoute, Router } from "@angular/router"
-import {  Observable } from "rxjs"
+import {  map, Observable } from "rxjs"
 import  { Store } from "@ngrx/store"
 import { Chanson } from "src/app/state/chanson/chanson.model"
 import {  selectChansonLoading, selectChansonsByAlbumId, selectPagination } from "src/app/state/chanson/chanson.selectors"
-import { createChanson, deleteChanson, loadChansons, loadChansonsByAlbumId, updateChanson } from "src/app/state/chanson/chanson.actions"
+import { createChanson, deleteChanson, loadChansons, loadChansonsByAlbumId, searchChansonsByTitle, updateChanson } from "src/app/state/chanson/chanson.actions"
 
 
 @Component({
@@ -26,6 +26,7 @@ export class TrackListComponent implements OnInit {
   selectedChanson: Chanson = {} as Chanson;
   audioFile: File | null = null;
   albumId: string | null = null;
+  searchQuery = ""
 
   constructor(
     private store: Store,
@@ -54,6 +55,44 @@ export class TrackListComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.loadPage(page);
+  }
+
+  // searchChansons(page: number): void {
+  //   this.store.dispatch(
+  //     searchChansonsByTitle({
+  //       title: this.searchQuery,
+  //       page: page,
+  //       size: this.pageSize,
+  //       sortBy: "title",
+  //     }),
+  //   )
+  // }
+  
+
+  searchChansons(page: number): void {
+    this.store.dispatch(
+      searchChansonsByTitle({
+        title: this.searchQuery,
+        page: page,
+        size: this.pageSize,
+        sortBy: "title",
+      })
+    );
+
+    // Combine search results with album filter
+    this.chansons$ = this.store.select(selectChansonsByAlbumId).pipe(
+      map((chansons) =>
+        this.albumId
+          ? chansons.filter((chanson) => chanson.albumId === this.albumId)
+          : chansons
+      )
+    );
+  }
+
+
+  onSearch(): void {
+    this.currentPage = 0
+    this.searchChansons(this.currentPage)
   }
 
   openAddModal(): void {

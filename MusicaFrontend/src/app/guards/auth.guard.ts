@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { AuthState } from '../state/auth/auth.reducer';
 import { take } from 'rxjs';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthGuard = (requiredRoles: string[] = []) => {
   const store = inject(Store<{ auth: AuthState }>);
@@ -26,6 +26,13 @@ export const AuthGuard = (requiredRoles: string[] = []) => {
 
         console.log('Decoded Token:', decodedToken);
 
+        const now = Math.floor(Date.now() / 1000);
+        if (decodedToken.exp && decodedToken.exp < now) {
+          console.warn('Token expired.');
+          router.navigate(['/auth/login']);
+          return false;
+        }
+
         const userRoles: string[] =
           decodedToken.roles ||
           decodedToken.authorities ||
@@ -34,7 +41,9 @@ export const AuthGuard = (requiredRoles: string[] = []) => {
 
         console.log('User Roles:', userRoles);
 
-        const hasAccess = requiredRoles.length === 0 || requiredRoles.some(role => userRoles.includes(role));
+        const hasAccess =
+          requiredRoles.length === 0 ||
+          requiredRoles.some(role => userRoles.includes(role));
 
         if (hasAccess) {
           return true;

@@ -76,5 +76,29 @@ export const chansonReducer = createReducer(
     ...state,
     loading: false,
     error: error,
-  }))
+  })),
+  on(ChansonActions.searchChansonsByTitle, (state) => ({
+    ...state,
+    loading: true,
+  })),
+  on(
+    ChansonActions.searchChansonsByTitleSuccess,
+    (state, { content, totalPages, totalElements, pageSize, pageNumber }) => ({
+      ...state,
+      loading: false,
+      chansons: content,
+      pagination: {
+        totalPages,
+        totalElements,
+        pageSize,
+        pageNumber,
+      },
+    }),
+  ),
+  on(ChansonActions.searchChansonsByTitleFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error,
+  })),
+  
 );

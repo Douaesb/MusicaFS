@@ -86,4 +86,24 @@ export class ChansonEffects {
       )
     )
   );
+
+  searchChansonsByTitle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ChansonActions.searchChansonsByTitle),
+      mergeMap((action) =>
+        this.chansonService.searchChansonsByTitle(action.title, action.page, action.size, action.sortBy).pipe(
+          map((response) =>
+            ChansonActions.searchChansonsByTitleSuccess({
+              content: response.content,
+              totalPages: response.totalPages,
+              totalElements: response.totalElements,
+              pageSize: response.pageable.pageSize,
+              pageNumber: response.pageable.pageNumber,
+            }),
+          ),
+          catchError((error) => of(ChansonActions.searchChansonsByTitleFailure({ error }))),
+        ),
+      ),
+    ),
+  );
 }

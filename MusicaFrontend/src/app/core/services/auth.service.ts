@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -53,4 +54,11 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
+  isTokenExpired(token: string): boolean {
+    const decoded: any = jwtDecode(token);
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp && decoded.exp < now;
+  }
+  
 }

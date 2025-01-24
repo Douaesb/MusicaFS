@@ -46,3 +46,25 @@ export const loadChansonsByAlbumIdFailure = createAction(
   '[Chanson] Load Chansons By Album ID Failure',
   props<{ error: any }>()
 );
+
+
+export const searchChansonsByTitle = createAction(
+  "[Chanson] Search Chansons By Title",
+  props<{ title: string; page: number; size: number; sortBy: string }>(),
+)
+
+export const searchChansonsByTitleSuccess = createAction(
+  "[Chanson] Search Chansons By Title Success",
+  props<{
+    content: Chanson[]
+    totalPages: number
+    totalElements: number
+    pageSize: number
+    pageNumber: number
+  }>(),
+)
+
+export const searchChansonsByTitleFailure = createAction(
+  "[Chanson] Search Chansons By Title Failure",
+  props<{ error: any }>(),
+)

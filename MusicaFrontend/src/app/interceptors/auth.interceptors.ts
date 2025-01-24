@@ -1,7 +1,6 @@
-import {HttpInterceptorFn} from "@angular/common/http";
-import {inject} from "@angular/core";
-import { AuthService } from "../core/services/auth.service";
-
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../core/services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -12,12 +11,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = authService.getToken();
 
-  if (token) {
+  if (token && !authService.isTokenExpired(token)) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
+  } else if (token) {
+    authService.logout();
   }
 
   return next(req);
