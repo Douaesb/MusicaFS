@@ -7,12 +7,13 @@ import  { Store } from "@ngrx/store"
 import { Chanson } from "src/app/state/chanson/chanson.model"
 import {  selectChansonLoading, selectChansonsByAlbumId, selectPagination } from "src/app/state/chanson/chanson.selectors"
 import { createChanson, deleteChanson, loadChansons, loadChansonsByAlbumId, searchChansonsByTitle, updateChanson } from "src/app/state/chanson/chanson.actions"
+import { AudioPlayerComponent } from "../audio-player/audio-player.component"
 
 
 @Component({
   selector: "app-tracklist",
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, AudioPlayerComponent],
   templateUrl: "./track-list.component.html",
   styleUrls: [],
 })
@@ -27,6 +28,7 @@ export class TrackListComponent implements OnInit {
   audioFile: File | null = null;
   albumId: string | null = null;
   searchQuery = ""
+  currentChansonIndex = 0;
 
   constructor(
     private store: Store,
@@ -41,6 +43,10 @@ export class TrackListComponent implements OnInit {
     }
   }
 
+
+playTrack(index: number): void {
+  this.currentChansonIndex = index;
+}
   loadPage(page: number): void {
     if (this.albumId) {
       this.store.dispatch(loadChansonsByAlbumId({ 
@@ -113,9 +119,16 @@ export class TrackListComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input?.files?.length) {
       this.audioFile = input.files[0];
+      
+      const audio = new Audio(URL.createObjectURL(this.audioFile));
+      audio.addEventListener('loadedmetadata', () => {
+        const durationInSeconds = Math.floor(audio.duration);
+        this.selectedChanson.duree = durationInSeconds.toString(); 
+        console.log('Audio Duration:', durationInSeconds);
+      });
     }
-  }
-
+  }  
+  
   viewTracks(albumId: string): void {
     this.router.navigate(['/album', albumId, 'tracks']);
   }
@@ -165,9 +178,16 @@ export class TrackListComponent implements OnInit {
   }
   
   
+  
 
   closeModal(): void {
     this.showModal = false;
     this.selectedChanson = {} as Chanson; 
+  }
+
+  formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   }
 }

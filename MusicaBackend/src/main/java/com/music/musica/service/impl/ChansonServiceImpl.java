@@ -11,6 +11,7 @@ import com.music.musica.service.GridFsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -120,4 +121,10 @@ public class ChansonServiceImpl implements ChansonService {
         }
         return false;
     }
+
+    @Override
+    public GridFsResource getAudioFile(String fileId) {
+        return gridFsService.getFile(fileId);
+    }
+
 }

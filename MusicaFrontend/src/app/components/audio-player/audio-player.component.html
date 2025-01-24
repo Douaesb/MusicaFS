@@ -1,31 +1,27 @@
 <!-- Player Controls -->
-<div class="fixed bottom-0 left-0 right-0 p-4 bg-opacity-90 backdrop-blur-md transition-all duration-300 ease-in-out mb-9">
-    <div *ngIf="selectedTrack$ | async as track; else loading" class="max-w-screen-xl mx-auto flex flex-col gap-4">
-        <div class="flex items-center justify-between">
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-opacity-90 backdrop-blur-md transition-all duration-300 ease-in-out pb-10 bg-teal-900">
+    <div class="max-w-screen-xl mx-auto flex flex-col gap-4">
+        <div class="flex items-center justify-between ">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-teal-400/20 rounded-lg">
-                    <img *ngIf="imageUrls[track.imageFileId!]" [src]="imageUrls[track.imageFileId!]" alt="{{ track.title }} cover" class="track-image">
+                <div class="rounded-lg border border-teal-400">
+                    <img class="w-12 h-12" src="../../../assets/musium_lg.png" alt="" />
                 </div>
-                <div>
-                    <div class="font-medium text-white">{{ track.title }}</div>
-                    <div class="text-sm text-gray-400"> {{ track.artist }} | {{ track.category }}</div>
-                </div>
+                <div *ngIf="chansons.length > 0" class="">
+                    <p>Now playing: {{ chansons[currentChansonIndex]!.title }}</p>
+                  </div>
             </div>
-            <div *ngIf="track" class="flex items-center gap-4">
-                <audio #audioPlayer (loadedmetadata)="onAudioLoaded()" (timeupdate)="onTimeUpdate()">
-                    <source [src]="audioFileUrl" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>   
-                <button (click)="previousTrack()" class="p-2 hover:bg-teal-400 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
+            <div *ngIf="chansons" class="flex items-center gap-4 audio-player">
+             
+                <button (click)="previousChanson()" class="p-2 hover:bg-teal-400 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                     </svg>
                 </button>
-                <button (click)="playPause()" class="p-2 bg-teal-400 hover:bg-teal-500 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
+                <button (click)="togglePlay()"   class="p-2 bg-teal-400 hover:bg-teal-500 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
                     <svg *ngIf="!isPlaying" class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.6582 9.28638C18.098 10.1862 18.8178 10.6361 19.0647 11.2122C19.2803 11.7152 19.2803 12.2847 19.0647 12.7878C18.8178 13.3638 18.098 13.8137 16.6582 14.7136L9.896 18.94C8.29805 19.9387 7.49907 20.4381 6.83973 20.385C6.26501 20.3388 5.73818 20.0469 5.3944 19.584C5 19.053 5 18.1108 5 16.2264V7.77357C5 5.88919 5 4.94701 5.3944 4.41598C5.73818 3.9531 6.26501 3.66111 6.83973 3.6149C7.49907 3.5619 8.29805 4.06126 9.896 5.05998L16.6582 9.28638Z" stroke="#000000" stroke-width="2" stroke-linejoin="round"></path></svg>
                     <svg *ngIf="isPlaying" class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5V19M16 5V19" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </button>
-                <button (click)="nextTrack()" class="p-2 hover:bg-teal-400 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
+                <button (click)="nextChanson()" class="p-2 hover:bg-teal-400 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                     </svg>
@@ -67,10 +63,7 @@
                     class="absolute top-0 left-0 h-full bg-teal-400 rounded-full transition-all duration-300 ease-in-out"
                     [style.width.%]="(currentTime / duration) * 100"
                 ></div>
-                <div 
-                    class="absolute top-0 left-0 h-full bg-white opacity-20 rounded-full transition-all duration-300 ease-in-out group-hover:opacity-40"
-                    [style.width.%]="(bufferPercentage)"
-                ></div>
+                
             </div>
             <span class="w-24 text-sm text-white font-medium transition-all duration-300 ease-in-out hover:text-teal-400">
                 {{ formatTime(currentTime) }} / {{ formatTime(duration) }}

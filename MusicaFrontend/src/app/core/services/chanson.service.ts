@@ -58,4 +58,10 @@ updateChanson(id: string, chanson: Chanson, audioFile?: File): Observable<Chanso
   deleteChanson(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  getChansonAudio(audioFileId: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/audio/${audioFileId}`, {
+      responseType: 'blob',
+    });
+  }
 }

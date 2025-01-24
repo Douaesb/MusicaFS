@@ -12,11 +12,11 @@ export const routes: Routes = [
       loadComponent: () => import('./components/albums/albums.component').then(m => m.AlbumsComponent),
       canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
   },
-    {
-        path: 'tracks/:id',
-        loadComponent: () => import('./components/track-detail/track-detail.component').then(m => m.TrackDetailComponent),
-        canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
-    },
+    // {
+    //     path: 'tracks/:id',
+    //     loadComponent: () => import('./components/track-detail/track-detail.component').then(m => m.TrackDetailComponent),
+    //     canActivate: [() => AuthGuard(['ROLE_USER', 'ROLE_ADMIN'])],
+    // },
     {
         path: '',
         redirectTo: '/tracks',

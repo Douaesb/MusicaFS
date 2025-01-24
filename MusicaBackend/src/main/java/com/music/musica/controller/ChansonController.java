@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -84,5 +87,21 @@ public class ChansonController {
     public ResponseEntity<Void> deleteChanson(@PathVariable String id) {
         chansonService.deleteChanson(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/admin/chansons/audio/{fileId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAudio(@PathVariable String fileId) {
+        try {
+            GridFsResource resource = chansonService.getAudioFile(fileId);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(resource.getContentType()))
+                    .body(resource.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

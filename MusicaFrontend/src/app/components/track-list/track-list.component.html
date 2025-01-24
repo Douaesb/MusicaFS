@@ -69,7 +69,7 @@
           />
         </div>
 
-        <div>
+        <!-- <div>
           <label for="duree" class="block text-sm font-medium text-gray-700">
             Duration (seconds)
           </label>
@@ -81,7 +81,7 @@
             class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
             required
           />
-        </div>
+        </div> -->
 
         <!-- New Fields -->
         <div>
@@ -218,7 +218,7 @@
     >
       <div *ngIf="chansons!.length > 0; else noData" class="flex gap-4 flex-col">
         <div
-          *ngFor="let chanson of chansons"
+          *ngFor="let chanson of chansons$ | async; let i = index"
           class="flex items-center justify-between bg-teal-800 p-3 rounded-lg hover:bg-teal-900 group transition-colors"
         >
           <div class="flex items-center gap-3">
@@ -233,9 +233,9 @@
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <span class="text-teal-400">{{ chanson.duree }}</span>
-            <button class="text-white py-1 px-3 rounded-lg transition">
-              <!-- Play button SVG -->
+            <span class="text-teal-400"> {{ formatTime(+chanson.duree) }}</span>
+            <button (click)="playTrack(i)" class="text-white py-1 px-3 rounded-lg transition">
+              {{ chanson.title }}
             </button>
 
             <button
@@ -281,4 +281,8 @@
     </div>
     <ng-template #loading>Loading...</ng-template>
   </div>
+  <app-audio-player
+  [chansons]="(chansons$ | async) || []"
+  [currentChansonIndex]="currentChansonIndex"
+></app-audio-player>
 </div>
