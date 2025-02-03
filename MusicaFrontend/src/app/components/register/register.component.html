@@ -28,17 +28,17 @@
       </div>
     </div>
     <div class="space-y-2">
-      <label for="roles" class="text-sm font-medium text-gray-700 block">Roles</label>
+      <label for="roles" class="text-sm font-medium text-teal-300 block">Roles (Select at least one )</label>
       <div class="relative">
         <select
           id="roles"
           formControlName="roles"
           multiple
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white"
+          class="w-full  h-16 px-4 py-3 mb-4 rounded-lg border border-teal-600 focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-teal-800 text-white appearance-none overflow-hidden"
           [ngClass]="{'border-red-500 focus:ring-red-500': registerForm.get('roles')?.invalid && registerForm.get('roles')?.touched}"
         >
           <option *ngFor="let role of roles" [value]="role">
-            {{ role }}
+            {{ roleLabels[role] }}
           </option>
         </select>
         <div *ngIf="registerForm.get('roles')?.invalid && registerForm.get('roles')?.touched"
@@ -46,7 +46,7 @@
           At least one role selection is required
         </div>
       </div>
-    </div>
+    </div>     
     <button type="submit" [disabled]="registerForm.invalid || loading"
             class="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 transition duration-200">
       Register

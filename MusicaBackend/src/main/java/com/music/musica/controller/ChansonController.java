@@ -89,7 +89,7 @@ public class ChansonController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/admin/chansons/audio/{fileId}")
+    @GetMapping({"/admin/chansons/audio/{fileId}", "/user/chansons/audio/{fileId}"})
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAudio(@PathVariable String fileId) {
         try {

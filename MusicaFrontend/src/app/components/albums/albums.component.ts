@@ -1,47 +1,57 @@
-import { CommonModule } from "@angular/common";
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { Store } from "@ngrx/store";
-import { Album } from "src/app/state/album/album.models";
-import { AlbumState } from "src/app/state/album/album.reducer";
-import * as AlbumActions from "src/app/state/album/album.action";
-import * as AuthActions from "src/app/state/auth/auth.action";
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Album } from 'src/app/state/album/album.models';
+import { AlbumState } from 'src/app/state/album/album.reducer';
+import * as AlbumActions from 'src/app/state/album/album.action';
+import * as AuthActions from 'src/app/state/auth/auth.action';
 
 import {
   selectAllAlbums,
   selectAlbumLoading,
   selectAlbumError,
-} from "src/app/state/album/album.selectors";
-import { Router } from "@angular/router";
+} from 'src/app/state/album/album.selectors';
+import { Router } from '@angular/router';
+import { AuthState } from 'src/app/state/auth/auth.reducer';
+import { selectIsAdmin } from 'src/app/state/auth/auth.selectors';
 
 @Component({
-  selector: "app-albums",
+  selector: 'app-albums',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: "./albums.component.html",
-  styleUrls: ["./albums.component.scss"],
+  templateUrl: './albums.component.html',
+  styleUrls: ['./albums.component.scss'],
 })
 export class AlbumsComponent {
-  @ViewChild("crudModal") crudModal!: ElementRef;
+  @ViewChild('crudModal') crudModal!: ElementRef;
+
+  isAdmin$: Observable<boolean>;
 
   albums$: Observable<Album[]> = this.store.select(selectAllAlbums);
   loading$: Observable<boolean> = this.store.select(selectAlbumLoading);
   error$: Observable<string | null> = this.store.select(selectAlbumError);
 
   selectedAlbum: Album | null = null;
-  newAlbum: Album = { title: "", artist: "", year: null };
+  newAlbum: Album = { title: '', artist: '', year: null };
 
-  searchType: string = "title"; 
-  searchQuery: string = "";
+  searchType: string = 'title';
+  searchQuery: string = '';
   filterYear: number | null = null;
 
   private searchTitleSubject = new Subject<string>();
   private searchArtistSubject = new Subject<string>();
   private filterYearSubject = new Subject<number | null>();
 
-  constructor(private store: Store<{ album: AlbumState }>,  private router: Router) {}
+  constructor(
+    private store: Store<{ album: AlbumState }>,
+    private readonly storeAuth: Store<{ auth: AuthState }>,
+    private router: Router
+  ) {
+    this.isAdmin$ = this.storeAuth.select(selectIsAdmin);
+  }
 
   ngOnInit(): void {
     this.loadAlbums();
@@ -55,7 +65,7 @@ export class AlbumsComponent {
             title,
             page: 0,
             size: 10,
-            sortBy: "title",
+            sortBy: 'title',
           })
         );
       });
@@ -69,7 +79,7 @@ export class AlbumsComponent {
             artist,
             page: 0,
             size: 10,
-            sortBy: "title",
+            sortBy: 'title',
           })
         );
       });
@@ -84,7 +94,7 @@ export class AlbumsComponent {
               year,
               page: 0,
               size: 10,
-              sortBy: "title",
+              sortBy: 'title',
             })
           );
         } else {
@@ -93,22 +103,26 @@ export class AlbumsComponent {
       });
   }
 
-  loadAlbums(page: number = 0, size: number = 10, sortBy: string = "title"): void {
+  loadAlbums(
+    page: number = 0,
+    size: number = 10,
+    sortBy: string = 'title'
+  ): void {
     this.store.dispatch(AlbumActions.loadAlbums({ page, size, sortBy }));
-    this.searchQuery = ""; // Reset search query
+    this.searchQuery = ''; // Reset search query
     this.filterYear = null;
   }
 
   onSearch() {
-    if (this.searchType === "title") {
+    if (this.searchType === 'title') {
       this.searchByTitle(this.searchQuery);
-    } else if (this.searchType === "artist") {
+    } else if (this.searchType === 'artist') {
       this.searchByArtist(this.searchQuery);
     }
   }
 
   onSearchTypeChange() {
-    this.searchQuery = "";
+    this.searchQuery = '';
   }
 
   searchByTitle(title: string): void {
@@ -127,7 +141,7 @@ export class AlbumsComponent {
   }
 
   openCreateModal(): void {
-    this.newAlbum = { title: "", artist: "", year: null };
+    this.newAlbum = { title: '', artist: '', year: null };
     this.selectedAlbum = null;
     this.showModal();
   }
@@ -140,13 +154,13 @@ export class AlbumsComponent {
 
   closeModal(): void {
     if (this.crudModal) {
-      this.crudModal.nativeElement.classList.add("hidden");
+      this.crudModal.nativeElement.classList.add('hidden');
     }
   }
 
   private showModal(): void {
     if (this.crudModal) {
-      this.crudModal.nativeElement.classList.remove("hidden");
+      this.crudModal.nativeElement.classList.remove('hidden');
     }
   }
 
@@ -180,6 +194,6 @@ export class AlbumsComponent {
   }
 
   logout() {
-    this.store.dispatch(AuthActions.logout())
+    this.store.dispatch(AuthActions.logout());
   }
 }

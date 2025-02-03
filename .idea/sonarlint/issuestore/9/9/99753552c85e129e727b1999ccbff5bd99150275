@@ -1,0 +1,5 @@
+
+o
+java:S6204+"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8º‘ éÈ2
+C
+java:S1452A"&Remove usage of generic wildcard type.(ÕŒˆ8ô¤ŸéÈ2

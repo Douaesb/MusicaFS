@@ -26,7 +26,10 @@ export class RegisterComponent {
   error: string | null = null;
   private readonly subscription: Subscription = new Subscription();
   roles = ['ROLE_USER', 'ROLE_ADMIN'];
-
+  roleLabels: { [key: string]: string } = {
+    'ROLE_USER': 'User',
+    'ROLE_ADMIN': 'Admin'
+  };
   constructor(
     private readonly fb: FormBuilder,
     private readonly store: Store<{ auth: AuthState }>

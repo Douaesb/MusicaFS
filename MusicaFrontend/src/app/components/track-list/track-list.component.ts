@@ -8,6 +8,8 @@ import { Chanson } from "src/app/state/chanson/chanson.model"
 import {  selectChansonLoading, selectChansonsByAlbumId, selectPagination } from "src/app/state/chanson/chanson.selectors"
 import { createChanson, deleteChanson, loadChansons, loadChansonsByAlbumId, searchChansonsByTitle, updateChanson } from "src/app/state/chanson/chanson.actions"
 import { AudioPlayerComponent } from "../audio-player/audio-player.component"
+import { AuthState } from "src/app/state/auth/auth.reducer"
+import { selectIsAdmin } from "src/app/state/auth/auth.selectors"
 
 
 @Component({
@@ -29,12 +31,15 @@ export class TrackListComponent implements OnInit {
   albumId: string | null = null;
   searchQuery = ""
   currentChansonIndex = 0;
+  isAdmin$: Observable<boolean>;
 
   constructor(
     private store: Store,
     private router: Router,
+    private readonly storeAuth: Store<{ auth: AuthState }>,
     private route: ActivatedRoute
-  ) {}
+  ) {this.isAdmin$ = this.storeAuth.select(selectIsAdmin);
+  }
 
   ngOnInit(): void {
     this.albumId = this.route.snapshot.paramMap.get('albumId');

@@ -1,141 +1,139 @@
-# 🎵 **MusicStream** - Local Music Made Easy 🎵
+# 🎵 **MusicStream** - Full-Stack Music Streaming Application 🎵
 
 ## 📚 **Project Overview**
 
-"MusicStream" is a lightweight, Angular-based music application designed to simplify listening to and organizing local music files. Built with a focus on modularity and maintainability, the app leverages **NgRx** for efficient state management and a seamless user experience.
+**MusicStream** is a full-stack music streaming application designed to provide a seamless experience for managing and listening to music. The project combines a **Spring Boot backend** for secure music catalog management and file storage with a modern **Angular frontend** for an intuitive user interface. The application leverages **NgRx** for state management on the frontend and **Spring Security** with **JWT** for secure authentication on the backend.
 
-The primary goal is to provide an intuitive and responsive platform for users to manage their music library and enjoy tracks with essential playback controls, all while maintaining a robust and scalable architecture.
+The goal is to create a robust, scalable, and user-friendly platform for managing albums, songs, and user roles, while offering essential playback controls and a responsive design.
 
 ---
 
 ## 💻 **Features**
 
-### 🔹 **Track Management**
-- Full **CRUD functionality** for music tracks, including:
-    - **Song title** (max 50 characters)
-    - **track image**
-    - **Artist name**
-    - **Optional description** (max 200 characters)
-    - **Date added** (automatically recorded)
-    - **Track duration** (calculated automatically)
-    - **Music category**: Pop, Rock, Rap, Cha3bi, etc.
+### **Backend (Spring Boot)**
+#### 🔹 **Album Management**
+- **List albums** with pagination (USER or ADMIN).
+- **Search albums** by title, artist, or year with pagination and sorting (USER or ADMIN).
+- **Add**, **modify**, or **delete** albums (ADMIN only).
 
-### 🔹 **Audio Player**
-- Core controls:
-    - **Play**, **Pause**, **Next**, and **Previous**.
+#### 🔹 **Song Management**
+- **List songs** with pagination (USER or ADMIN).
+- **Search songs** by title or album with pagination and sorting (USER or ADMIN).
+- **Add**, **modify**, or **delete** songs (ADMIN only).
+- **Upload audio files** (MP3, WAV, OGG) with a size limit of **15MB**.
+
+#### 🔹 **User Management**
+- **Authentication** via JWT.
+- **Account creation** and role management (ADMIN only).
+- **Role-based access control**:
+  - `/api/user/**` for USER role.
+  - `/api/admin/**` for ADMIN role.
+
+#### 🔹 **File Management**
+- **GridFS** for secure storage and streaming of audio files.
+- Supported formats: **MP3**, **WAV**, **OGG**.
+
+---
+
+### **Frontend (Angular)**
+#### 🔹 **Track Management**
+- **CRUD operations** for songs with metadata:
+  - Title, artist, description, duration, category, and date added.
+- **File upload** for audio tracks.
+- **Search and filtering** functionality.
+
+#### 🔹 **Audio Player**
+- Core controls: **Play**, **Pause**, **Next**, **Previous**.
 - Volume and progress bar controls.
-- Built with **Web Audio API** or equivalent tools.
+- State management via **NgRx**.
 
-### 🔹 **File Management**
-- Local audio file storage using **IndexedDB**:
-    - Files are stored in two tables:
-        - **Audio files** (as blobs).
-        - **Image files** (as blobs).
-        - **Track metadata** (track details).
-    - Supported formats: **MP3**, **WAV**, **OGG**.
-    - File size limit: **15MB**.
-
-### 🔹 **Cover Art**
-- Optional album cover image for each track.
-- Supported formats: **PNG**, **JPEG**.
-
-### 🔹 **Validation**
-- Character limits:
-    - Title: **50 characters**.
-    - Description: **200 characters**.
-- File validation for audio and images.
-- Error handling for uploads and storage.
+#### 🔹 **User Interface**
+- **Authentication** and **registration** pages.
+- **Library page** with a list of albums.
+- **Album detail page** showing all tracks in the selected album.
+- Integrated **audio player** with playback controls.
 
 ---
 
 ## 🛠 **Technical Features & Architecture**
 
-### **Angular 17**
-- **Component-based architecture**: Modular and maintainable.
-- **Reactive programming**: Using **RxJS Observables**.
-- **Lazy-loaded routing**: Efficient page navigation.
-- **Form handling**: Reactive forms for CRUD operations.
-- **Pipes**: Formatting durations and other display values.
+### **Backend (Spring Boot)**
+- **Spring Security**: JWT-based authentication and role-based access control.
+- **Spring Data MongoDB**: For database interactions.
+- **GridFS**: For storing and streaming audio files.
+- **REST API**: Stateless and scalable.
+- **Bean Validation**: For input validation.
+- **Docker**: Containerization for easy deployment.
+- **Jenkins**: Continuous integration and deployment.
+- **Unit Testing**: JUnit and Mockito.
 
-### **NgRx**
-- Comprehensive state management with:
-    - **Actions** for event-driven architecture.
-    - **Reducers** to handle state changes.
-    - **Effects** for managing side effects.
-    - **Selectors** to query state efficiently.
-
-### **UI Design**
-- Designed with **Figma** or **Adobe XD** for simplicity and clarity.
-- Responsive layout using **Bootstrap** or **Tailwind CSS**.
-
-### **Docker Integration**
-- Preconfigured Docker setup for easy deployment.
-
----
-
-## 📊 **Core Pages**
-
-### **Library**
-- A searchable list of all tracks in the library.
-
-### **Track View**
-- Detailed view of a selected track with playback controls.
-
-### **Optional Pages**
-- Additional pages based on future project requirements.
+### **Frontend (Angular)**
+- **Angular 17**: Component-based architecture.
+- **NgRx**: State management with actions, reducers, effects, and selectors.
+- **RxJS**: Reactive programming for asynchronous operations.
+- **Reactive Forms**: For CRUD operations.
+- **Bootstrap/Tailwind CSS**: Responsive and modern UI design.
+- **Lazy Loading**: Efficient page navigation.
+- **HTTP Interceptors**: For authentication and error handling.
+- **Guards**: For route protection.
+- **Resolvers**: For pre-fetching data.
 
 ---
 
 ## 📦 **Technologies Used**
 
-- **Frontend**: Angular 17, TypeScript, SCSS, Bootstrap/Tailwind CSS.
+### **Backend**
+- **Framework**: Spring Boot.
+- **Database**: MongoDB.
+- **Security**: Spring Security, JWT.
+- **Build Tool**: Maven.
+- **CI/CD**: Jenkins.
+- **Containerization**: Docker.
+- **Testing**: JUnit, Mockito.
+
+### **Frontend**
+- **Framework**: Angular 17.
 - **State Management**: NgRx.
-- **Storage**: IndexedDB.
+- **Styling**: Bootstrap/Tailwind CSS.
+- **Storage**: IndexedDB (for local caching).
 - **Unit Testing**: Jasmine.
-- **Design**: Figma or Adobe XD.
+- **Design**: Figma.
 
 ---
 
 ## 🚀 **Getting Started**
 
-### 1. **Clone the repository**
+### **Backend Setup**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Douaesb/musicaFS.git
+   cd musica
+   ```
+2. Build the project:
+   ```bash
+   mvn clean install
+   ```
+3. Run the Docker containers:
+   ```bash
+   docker-compose up -d
+   ```
+4. Access the API at `http://localhost:8080`.
 
-```bash
-git clone https://github.com/Douaesb/musicstream.git
-cd musicstream
-```
-
-### 2. **Install dependencies**
-
-```bash
-npm install
-```
-
-### 3. **Start the development server**
-
-```bash
-ng serve
-```
-
-Navigate to `http://localhost:4200` to access the app.
-
-### 4. **Docker Setup**
-- Build the Docker image:
-  ```bash
-  docker build -t musicstream .
-  ```
-- Run the container:
-  ```bash
-  docker run -p 4200:4200 musicstream
-  ```
-
----
-
-## 💡 **Future Enhancements**
-- **User authentication** for personalized libraries.
-- **Cloud synchronization** for music across devices.
-- **Integration** with online music platforms or APIs.
-- **Advanced equalizer** and audio effects.
+### **Frontend Setup**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Douaesb/musicstream.git
+   cd musicstream
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   ng serve
+   ```
+4. Access the app at `http://localhost:4200`.
 
 ---
 
@@ -152,19 +150,22 @@ We welcome contributions! To contribute:
 
 ## 📱 **Screenshots**
 
-**Library Page**:
+### **Authentification**
+![Login](screenshots/7.png)
+![Register](screenshots/6.png)
 
+### **Albums Page**
 ![Library Page](screenshots/1.png)
 ![Library Page](screenshots/2.png)
+![Library Page](screenshots/8.png)
 ![Library Page](screenshots/3.png)
+
+
+### **Tracks Page**
 ![Library Page](screenshots/4.png)
+![Library Page](screenshots/9.png)
 ![Library Page](screenshots/5.png)
-
-
-**Track View**:
-
-![Track View](screenshots/6.png)
-
+![Library Page](screenshots/10.png)
 
 ---
 
@@ -174,145 +175,32 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-### 🎧 **Start Streaming Your Local Music Today!**
+### 🎧 **Start Streaming Your Music Today!**
 
-Enjoy a streamlined and customizable music experience with **MusicStream**. 🎶
+Enjoy a seamless and customizable music experience with **MusicStream**. 🎶
 
-# Music Catalog API
+---
 
-## Project Description
-This project is a secure REST API for managing a music catalog, allowing for album and song management with different access levels (USER/ADMIN) via stateless authentication. The technical architecture is based on Spring Boot and incorporates modern DevOps practices.
+## 📊 **Core Pages**
 
-## General Objective
-The main objective of this application is to provide a robust REST API for:
-- Managing albums and songs
-- Managing users and their roles
-- Offering enhanced security through authentication and access control
-- Integrating tools for continuous deployment
+### **Library**
+- A searchable list of all albums and tracks.
 
-## Project Structure
-- **Controllers:** Handle HTTP REST requests
-- **Services:** Contain business logic
-- **Repositories:** Interact with the database
-- **DTOs and Mappers:** Transform entities for API responses
-- **Exceptions:** Handle API-specific errors
+### **Album Detail**
+- Detailed view of a selected album with all its tracks.
 
-## Main Entities
-### Album
-- `title` (String)
-- `artist` (String)
-- `year` (Integer)
+### **Audio Player**
+- Integrated player with playback controls.
 
-### Song
-- `title` (String)
-- `duration` (Integer)
-- `trackNumber` (Integer)
+---
 
-### User
-- `login` (String)
-- `password` (String)
-- `active` (Boolean)
-- `roles` (Collection)
+## 💡 **Future Enhancements**
+- **User authentication** for personalized libraries.
+- **Cloud synchronization** for music across devices.
+- **Integration** with online music platforms or APIs.
+- **Advanced equalizer** and audio effects.
 
-### Relationships
-- An album can have multiple songs
-- A song belongs to a single album
-
-## Project Features
-### Album Management
-1. List albums with pagination (USER or ADMIN)
-2. Search albums by title with pagination and sorting (USER or ADMIN)
-3. Search albums by artist (USER or ADMIN)
-4. Filter albums by year with pagination and sorting (USER or ADMIN)
-5. Add a new album (ADMIN only)
-6. Modify an existing album (ADMIN only)
-7. Delete an album (ADMIN only)
-
-**Endpoints:**
-- `/api/user/albums/**`
-- `/api/admin/albums/**`
-
-### Song Management
-1. List songs with pagination (USER or ADMIN)
-2. Search songs by title with pagination and sorting (USER or ADMIN)
-3. List songs of an album with pagination and sorting (USER or ADMIN)
-4. Add a new song (ADMIN only)
-5. Modify an existing song (ADMIN only)
-6. Delete a song (ADMIN only)
-
-**Endpoints:**
-- `/api/user/songs/**`
-- `/api/admin/songs/**`
-
-### User Management
-1. Authentication: `/api/auth/login`
-2. Account creation: `POST /api/auth/register`
-3. List users: `GET /api/admin/users` (ADMIN only)
-4. Role management: `PUT /api/admin/users/{id}/roles` (ADMIN only)
-
-## Security
-- **Stateless Authentication:** JWT-based
-- **Password Encryption:** BCryptPasswordEncoder
-- **Access Restrictions:**
-    - `/api/admin/*` requires ADMIN role
-    - `/api/user/*` requires USER role
-- **Profiles:**
-    - **Dev:** For development and testing
-    - **Prod:** For production deployment
-
-## Technologies Used
-- **Framework:** Spring Boot
-- **API:** REST
-- **Database:** MongoDB with Spring Data
-- **Security:** Spring Security with JWT
-- **Build Tool:** Maven
-- **CI/CD:** Jenkins
-- **Containerization:** Docker
-- **Image Repository:** DockerHub
-- **Testing:** JUnit, Mockito
-- **API Documentation:** Swagger
-- **Development Tools:** Git, JIRA (Scrum), Lombok, Spring Boot DevTools, SonarLint
-
-## Installation and Execution Guide
-
-### Prerequisites
-- Java 8 or higher
-- Maven
-- Docker and Docker Compose
-- MongoDB
-
-### Steps to Follow
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Douaesb/musica.git
-   cd musica
-
-2. Build the project:
-
-```shellscript
-mvn clean install
-```
-
-
-3. Run the Docker containers:
-
-```shellscript
-docker-compose up -d
-```
-
-
-4. Access the application:
-
-1. The API will be available at `http://localhost:8080`
-2. Test the endpoints using Postman or other API testing tools
-
-
-## Testing
-
-- Run unit tests: `mvn test`
-
-- Postman collection for API testing is available in the `postman` directory
-
+---
 
 ## Contact
 
@@ -321,6 +209,3 @@ For any questions or suggestions, please contact:
 - **Name:** Douae Sebti
 - **Email:** [douae.sb411@gmail.com](mailto:douae.sb411@gmail.com)
 - **GitHub:** [Douaesb](https://github.com/Douaesb)
-
-## PLanification JIRA
-https://douaesb411.atlassian.net/jira/software/projects/MUS/boards/14/backlog?epics=visible&atlOrigin=eyJpIjoiNWMzMzU2YzFjYjY5NDUwNGJjOTBhNWVlNDI1ZmVlZjMiLCJwIjoiaiJ9
